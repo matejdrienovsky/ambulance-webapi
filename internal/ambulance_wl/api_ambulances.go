@@ -25,4 +25,12 @@ type AmbulancesAPI interface {
     // Deletes specific ambulance 
      DeleteAmbulance(c *gin.Context)
 
+    // GetAmbulance Get /api/ambulance/:ambulanceId
+    // Provides details about ambulance 
+     GetAmbulance(c *gin.Context)
+
+    // UpdateAmbulance Put /api/ambulance/:ambulanceId
+    // Updates specific ambulance 
+     UpdateAmbulance(c *gin.Context)
+
 }

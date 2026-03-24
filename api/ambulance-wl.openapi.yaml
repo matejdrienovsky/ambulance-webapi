@@ -222,6 +222,113 @@ paths:
                   $ref: "#/components/examples/ConditionsListExample"
         "404":
           description: Ambulance with such ID does not exists
+    post:
+      tags:
+        - ambulanceConditions
+      summary: Adds new predefined condition
+      operationId: createCondition
+      description: Adds one condition into predefined conditions of the ambulance
+      parameters:
+        - in: path
+          name: ambulanceId
+          description: pass the id of the particular ambulance
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Condition"
+            examples:
+              request-sample:
+                $ref: "#/components/examples/ConditionExample"
+        description: Condition to add
+        required: true
+      responses:
+        "201":
+          description: value of added condition
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Condition"
+              examples:
+                response:
+                  $ref: "#/components/examples/ConditionExample"
+        "400":
+          description: Missing mandatory properties of input object.
+        "404":
+          description: Ambulance with such ID does not exists
+        "409":
+          description: Condition with such code already exists
+    put:
+      tags:
+        - ambulanceConditions
+      summary: Replaces predefined conditions list
+      operationId: updateConditions
+      description: Replaces predefined conditions list for the ambulance
+      parameters:
+        - in: path
+          name: ambulanceId
+          description: pass the id of the particular ambulance
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: "#/components/schemas/Condition"
+            examples:
+              request-sample:
+                $ref: "#/components/examples/ConditionsListExample"
+        description: Full list of conditions to store
+        required: true
+      responses:
+        "200":
+          description: value of updated predefined conditions
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Condition"
+              examples:
+                response:
+                  $ref: "#/components/examples/ConditionsListExample"
+        "400":
+          description: Missing mandatory properties of input object.
+        "404":
+          description: Ambulance with such ID does not exists
+        "409":
+          description: Request contains duplicate condition codes
+  "/waiting-list/{ambulanceId}/condition/{conditionCode}":
+    delete:
+      tags:
+        - ambulanceConditions
+      summary: Deletes one predefined condition
+      operationId: deleteCondition
+      description: Deletes one condition from predefined conditions of the ambulance
+      parameters:
+        - in: path
+          name: ambulanceId
+          description: pass the id of the particular ambulance
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: conditionCode
+          description: pass condition code of predefined condition
+          required: true
+          schema:
+            type: string
+      responses:
+        "204":
+          description: Item deleted
+        "404":
+          description: Ambulance or Condition with such ID does not exists
   "/ambulance":
     post:
       tags:
@@ -254,6 +361,70 @@ paths:
         "409":
           description: Entry with the specified id already exists
   "/ambulance/{ambulanceId}":
+    get:
+      tags:
+        - ambulances
+      summary: Provides details about ambulance
+      operationId: getAmbulance
+      description: By using ambulanceId you can get details of ambulance.
+      parameters:
+        - in: path
+          name: ambulanceId
+          description: pass the id of the particular ambulance
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: value of the ambulance
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Ambulance"
+              examples:
+                response:
+                  $ref: "#/components/examples/AmbulanceExample"
+        "404":
+          description: Ambulance with such ID does not exist
+    put:
+      tags:
+        - ambulances
+      summary: Updates specific ambulance
+      operationId: updateAmbulance
+      description: Use this method to update content of ambulance.
+      parameters:
+        - in: path
+          name: ambulanceId
+          description: pass the id of the particular ambulance
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Ambulance"
+            examples:
+              request:
+                $ref: "#/components/examples/AmbulanceExample"
+        description: Ambulance object to update
+        required: true
+      responses:
+        "200":
+          description: value of updated ambulance
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Ambulance"
+              examples:
+                response:
+                  $ref: "#/components/examples/AmbulanceExample"
+        "400":
+          description: Missing mandatory properties of input object.
+        "403":
+          description: Value of the ambulanceId and the data id is mismatching.
+        "404":
+          description: Ambulance with such ID does not exist
     delete:
       tags:
         - ambulances

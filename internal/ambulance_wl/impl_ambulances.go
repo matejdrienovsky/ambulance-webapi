@@ -138,3 +138,53 @@ func (o *implAmbulancesAPI) DeleteAmbulance(c *gin.Context) {
 		)
 	}
 }
+
+// GetAmbulance - Provides details about ambulance
+func (o *implAmbulancesAPI) GetAmbulance(c *gin.Context) {
+	updateAmbulanceFunc(c, func(
+		c *gin.Context,
+		ambulance *Ambulance,
+	) (updatedAmbulance *Ambulance, responseContent interface{}, status int) {
+		return nil, ambulance, http.StatusOK
+	})
+}
+
+// UpdateAmbulance - Updates specific ambulance
+func (o *implAmbulancesAPI) UpdateAmbulance(c *gin.Context) {
+	updateAmbulanceFunc(c, func(
+		c *gin.Context,
+		_ *Ambulance,
+	) (updatedAmbulance *Ambulance, responseContent interface{}, status int) {
+		ambulanceID := c.Param("ambulanceId")
+
+		var updated Ambulance
+		if err := c.ShouldBindJSON(&updated); err != nil {
+			return nil, gin.H{
+				"status":  "Bad Request",
+				"message": "Invalid request body",
+				"error":   err.Error(),
+			}, http.StatusBadRequest
+		}
+
+		if updated.Id == "" {
+			updated.Id = ambulanceID
+		}
+		if updated.Id != ambulanceID {
+			return nil, gin.H{
+				"status":  "Forbidden",
+				"message": "Path ambulanceId and ambulance.id are mismatching",
+			}, http.StatusForbidden
+		}
+		if updated.Name == "" || updated.RoomNumber == "" {
+			return nil, gin.H{
+				"status":  "Bad Request",
+				"message": "name and roomNumber are required",
+			}, http.StatusBadRequest
+		}
+
+		if len(updated.WaitingList) > 0 {
+			updated.reconcileWaitingList()
+		}
+		return &updated, updated, http.StatusOK
+	})
+}

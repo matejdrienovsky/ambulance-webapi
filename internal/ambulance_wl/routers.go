@@ -74,10 +74,28 @@ type ApiHandleFunctions struct {
 func getRoutes(handleFunctions ApiHandleFunctions) []Route {
 	return []Route{ 
 		{
+			"CreateCondition",
+			http.MethodPost,
+			"/api/waiting-list/:ambulanceId/condition",
+			handleFunctions.AmbulanceConditionsAPI.CreateCondition,
+		},
+		{
+			"DeleteCondition",
+			http.MethodDelete,
+			"/api/waiting-list/:ambulanceId/condition/:conditionCode",
+			handleFunctions.AmbulanceConditionsAPI.DeleteCondition,
+		},
+		{
 			"GetConditions",
 			http.MethodGet,
 			"/api/waiting-list/:ambulanceId/condition",
 			handleFunctions.AmbulanceConditionsAPI.GetConditions,
+		},
+		{
+			"UpdateConditions",
+			http.MethodPut,
+			"/api/waiting-list/:ambulanceId/condition",
+			handleFunctions.AmbulanceConditionsAPI.UpdateConditions,
 		},
 		{
 			"CreateWaitingListEntry",
@@ -120,6 +138,18 @@ func getRoutes(handleFunctions ApiHandleFunctions) []Route {
 			http.MethodDelete,
 			"/api/ambulance/:ambulanceId",
 			handleFunctions.AmbulancesAPI.DeleteAmbulance,
+		},
+		{
+			"GetAmbulance",
+			http.MethodGet,
+			"/api/ambulance/:ambulanceId",
+			handleFunctions.AmbulancesAPI.GetAmbulance,
+		},
+		{
+			"UpdateAmbulance",
+			http.MethodPut,
+			"/api/ambulance/:ambulanceId",
+			handleFunctions.AmbulancesAPI.UpdateAmbulance,
 		},
 	}
 }
