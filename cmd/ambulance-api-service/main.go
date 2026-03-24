@@ -7,6 +7,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/matejdrienovsky/ambulance-webapi/api"
+	"github.com/matejdrienovsky/ambulance-webapi/internal/ambulance_wl"
 )
 
 func main() {
@@ -21,6 +22,13 @@ func main() {
 	}
 	engine := gin.New()
 	engine.Use(gin.Recovery())
+
+	// request routings
+	handleFunctions := &ambulance_wl.ApiHandleFunctions{
+		AmbulanceConditionsAPI:  ambulance_wl.NewAmbulanceConditionsApi(),
+		AmbulanceWaitingListAPI: ambulance_wl.NewAmbulanceWaitingListApi(),
+	}
+	ambulance_wl.NewRouterWithGinEngine(engine, *handleFunctions)
 	engine.GET("/openapi", api.HandleOpenApi)
 	if err := engine.Run(":" + port); err != nil {
 		log.Fatalf("server failed: %v", err)
