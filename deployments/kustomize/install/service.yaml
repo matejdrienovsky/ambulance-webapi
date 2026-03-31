@@ -1,0 +1,12 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: xdrienovskym2-ambulance-webapi
+spec:
+  selector:
+    pod: xdrienovskym2-ambulance-webapi-label
+  ports:
+  - name: http
+    protocol: TCP
+    port: 80
+    targetPort: webapi-port
