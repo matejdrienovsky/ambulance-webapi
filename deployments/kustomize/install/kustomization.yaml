@@ -4,6 +4,7 @@ kind: Kustomization
 resources:
 - deployment.yaml
 - service.yaml
+- openapi-ui.service.yaml
 
 configMapGenerator:
 - name: xdrienovskym2-ambulance-webapi-mongodb-init
